@@ -51,9 +51,25 @@ variable "fail_on_nonzero_exit_code" {
 variable "fail_on_stderr" {
   type        = bool
   default     = false
-  description = "Whether a Terraform error should be thrown if the command outputs anything to stderr. If true, nothing will be returned from this module and Terraform will fail the apply. If false, the error message will be returned in `stderr` and the exit code will be returned in `exit_code`."
+  description = "Whether a Terraform error should be thrown if the command outputs anything to stderr. If true, nothing will be returned from this module and Terraform will fail the apply. If false, the error message will be returned in `stderr` and the exit code will be returned in `exit_code`. This is disabled by default because many commands write to stderr even if nothing went wrong."
   validation {
     condition     = var.fail_on_stderr != null
     error_message = "The `fail_on_stderr` variable must not be `null`."
   }
+}
+
+variable "fail_on_timeout" {
+  type        = bool
+  default     = true
+  description = "Whether a Terraform error should be thrown if the create command times out (only applies if the `timeout_create` or `timeout_destroy` variable is provided). If true, nothing will be returned from this module and Terraform will fail the apply. If false, the `exit_code` will be -1."
+  validation {
+    condition     = var.fail_on_timeout != null
+    error_message = "The `fail_on_timeout` variable must not be `null`."
+  }
+}
+
+variable "timeout" {
+  type = number
+  default = null
+  description = "The maximum number of seconds to allow the shell command to execute for. If it exceeds this timeout, it will be killed and will fail. Leave as the default (`null`) for no timeout."
 }

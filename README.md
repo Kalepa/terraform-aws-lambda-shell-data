@@ -9,6 +9,9 @@ This module runs shell commands in a Lambda function and treats the result like 
 module "lambda-shell" {
   source = "Invicton-Labs/lambda-shell/aws"
 
+  // Never let any requests run longer than this
+  lambda_timeout = 90
+
   // Give the Lambda function the ability to run any request.
   // You can restrict this to whichever permissions you actually need.
   lambda_role_policy_arns = [
@@ -26,6 +29,12 @@ module "lambda-shell-data" {
   interpreter   = ["python3"]
   // Load the command/script from a file
   command       = file("describe-regions.py")
+
+  // Don't let the request run longer than this timeout
+  // NOTE: if you want this timeout to have any effect, it should be shorter than
+  // the `lambda_timeout` variable on the lambda-shell module.
+  timeout = 5
+
   // Cause Terraform to fail if the command returns a non-zero exit code
   fail_on_nonzero_exit_code = true
   // Cause Terraform to fail if the command outputs anything to stderr
