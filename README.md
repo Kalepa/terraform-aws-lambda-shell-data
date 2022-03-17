@@ -27,7 +27,7 @@ module "lambda-shell-data" {
 
   // Run the command using the Python interpreter
   // This is the path to it in Python3.9 (which the lambda-shell module uses)
-  interpreter   = ["/var/lang/bin/python3.9"]
+  interpreter   = ["python3"]
   // Load the command/script from a file
   command       = file("describe-regions.py")
 
