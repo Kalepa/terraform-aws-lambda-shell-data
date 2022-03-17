@@ -12,18 +12,48 @@ variable "force_wait_for_apply" {
 }
 
 variable "interpreter" {
-  description = "The interpreter (e.g. `sh`, `bash`, `python3`) and flags to use as provided (if the `script` input parameter is not provided) or to use to run the provided `script`. The input format is a list of strings, such as `[\"bash\", \"-d\"]`."
+  description = "The interpreter (e.g. `sh`, `bash`, `python3`) and flags to use to run the provided `command`. The input format is a list of strings, such as `[\"bash\", \"-d\"]`."
   type        = list(string)
   default     = ["bash"]
+  validation {
+    condition     = var.interpreter != null
+    error_message = "The `interpreter` variable must not be `null`."
+  }
 }
 
 variable "command" {
-  description = "The command to be run by the given interpreter. This field can be multi-line; the content will be stored in a file and executed by the given interpreter."
+  description = "The command to be run by the given interpreter. Note that the command will be stored in a file and the file name will be given as an argument to the `interpreter`. This means it can be multi-line if desired."
   type        = string
 }
 
-variable "fail_on_error" {
+variable "environment" {
+  type        = map(string)
+  default     = {}
+  description = "Map of environment variables to pass to the command. Will be merged with `sensitive_environment` and `triggerless_environment` (if either of them has the same key, those values will overwrite these values)."
+}
+
+variable "sensitive_environment" {
+  type        = map(string)
+  default     = {}
+  description = "Map of (sentitive) environment variables to pass to the command. Will be merged with `environment` (this overwrites those values with the same key) and `triggerless_environment` (those values overwrite these values with the same key)."
+}
+
+variable "fail_on_nonzero_exit_code" {
+  type        = bool
+  default     = true
+  description = "Whether a Terraform error should be thrown if the command exits with a non-zero exit code. If true, nothing will be returned from this module and Terraform will fail the apply. If false, the error message will be returned in `stderr` and the error code will be returned in `exit_code`."
+  validation {
+    condition     = var.fail_on_nonzero_exit_code != null
+    error_message = "The `fail_on_nonzero_exit_code` variable must not be `null`."
+  }
+}
+
+variable "fail_on_stderr" {
   type        = bool
   default     = false
-  description = "Whether a Terraform error should be thrown if the command returns a non-zero exit code. If true, nothing will be returned from this module and Terraform will fail the apply. If false, the error message will be returned in `stderr` and the error code will be returned in `exitstatus`. Default: `false`."
+  description = "Whether a Terraform error should be thrown if the command outputs anything to stderr. If true, nothing will be returned from this module and Terraform will fail the apply. If false, the error message will be returned in `stderr` and the exit code will be returned in `exit_code`."
+  validation {
+    condition     = var.fail_on_stderr != null
+    error_message = "The `fail_on_stderr` variable must not be `null`."
+  }
 }

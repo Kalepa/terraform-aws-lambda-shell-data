@@ -8,12 +8,14 @@ data "aws_lambda_invocation" "shell" {
   ]
   function_name = local.wait_for_apply == null ? var.lambda_shell_module.invicton_labs_lambda_shell_arn : var.lambda_shell_module.invicton_labs_lambda_shell_arn
   input = jsonencode({
-    interpreter   = var.interpreter
-    command       = var.command
-    fail_on_error = var.fail_on_error
+    interpreter               = var.interpreter
+    command                   = var.command
+    fail_on_nonzero_exit_code = var.fail_on_nonzero_exit_code
+    fail_on_stderr            = var.fail_on_stderr
+    environment               = var.sensitive_environment == null || length(var.sensitive_environment) == 0 ? (var.environment == null ? {} : var.environment) : sensitive(merge((var.environment == null ? {} : var.environment), var.sensitive_environment))
   })
 }
 
 locals {
-    result = jsondecode(data.aws_lambda_invocation.shell.result)
+  result = jsondecode(data.aws_lambda_invocation.shell.result)
 }

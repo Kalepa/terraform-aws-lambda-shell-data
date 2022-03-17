@@ -8,7 +8,7 @@ output "stderr" {
   value       = local.result.stderr
 }
 
-output "exitstatus" {
+output "exit_code" {
   description = "The exit status code of the shell command."
-  value       = local.result.exitstatus
+  value       = local.result.exit_code
 }

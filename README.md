@@ -26,8 +26,10 @@ module "lambda-shell-data" {
   interpreter   = ["python3"]
   // Load the command/script from a file
   command       = file("describe-regions.py")
-  // Cause Terraform to fail if the function throws an error
-  fail_on_error = true
+  // Cause Terraform to fail if the command returns a non-zero exit code
+  fail_on_nonzero_exit_code = true
+  // Cause Terraform to fail if the command outputs anything to stderr
+  fail_on_stderr = true
 }
 
 output "shell-data" {
