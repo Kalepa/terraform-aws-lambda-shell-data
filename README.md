@@ -1,6 +1,6 @@
 # Terraform AWS Lambda Shell (Data)
 
-This module runs shell commands in a Lambda function and treats the result like a data source (re-runs during each refresh/plan step). It is intended to be used with the [Invicton-Labs/lambda-shell/aws](https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws/latest) module.
+This module runs shell commands in a Lambda function and treats the result like a data source (re-runs during each refresh/plan step). It is intended to be used with the [Kalepa/lambda-shell/aws](https://registry.terraform.io/modules/Kalepa/lambda-shell/aws/latest) module.
 
 ## Usage
 
