@@ -7,7 +7,7 @@ This module runs shell commands in a Lambda function and treats the result like 
 `main.tf`
 ```
 module "lambda-shell" {
-  source = "Invicton-Labs/lambda-shell/aws"
+  source = "Kalepa/lambda-shell/aws"
 
   // Never let any requests run longer than this
   lambda_timeout = 90
@@ -20,7 +20,7 @@ module "lambda-shell" {
 }
 
 module "lambda-shell-data" {
-  source              = "Invicton-Labs/lambda-shell-data/aws"
+  source              = "Kalepa/lambda-shell-data/aws"
 
   // Pass in the Lambda Shell module
   lambda_shell_module = module.lambda-shell
